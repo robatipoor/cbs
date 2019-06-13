@@ -23,8 +23,8 @@ fn server(daemon: bool) {
     }
     clean();
     if daemon {
-        info!("start daemon mod");
         start_daemonize().unwrap_or_else(|e| fatal!(e));
+        info!("start daemon mod");
     } else if let Err(e) = ctrlc::set_handler(clean_and_exit) {
         fatal!(e);
     }
@@ -73,6 +73,6 @@ fn start_daemonize() -> Result {
     }
 }
 
-fn is_running_server() -> bool {
+pub fn is_running_server() -> bool {
     unix::net::UnixStream::connect(OUT_DIR.join(SOCKET_FILE)).is_ok()
 }

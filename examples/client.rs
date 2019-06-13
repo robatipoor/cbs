@@ -16,7 +16,7 @@ fn main() {
     let client = Action::Get
         .send()
         .and_then(|resp| {
-            eprintln!("reponse is {:?}", resp);
+            println!("reponse is {:?}", resp);
             Ok(())
         })
         .map_err(|err| {
