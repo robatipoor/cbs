@@ -7,6 +7,7 @@ use daemonize::Daemonize;
 use futures::{Future, Stream};
 use log::*;
 use std::fs::File;
+use std::os::unix;
 use std::sync::{Once, ONCE_INIT};
 use tokio::net::UnixListener;
 static ONCE: Once = ONCE_INIT;
@@ -25,7 +26,7 @@ fn server(daemon: bool) {
         info!("start daemon mod");
         start_daemonize().unwrap_or_else(|e| fatal!(e));
     } else if let Err(e) = ctrlc::set_handler(clean_and_exit) {
-            fatal!(e);
+        fatal!(e);
     }
     info!("unix listener bind to {:?}", OUT_DIR.join(SOCKET_FILE));
     let listener = UnixListener::bind(OUT_DIR.join(SOCKET_FILE)).unwrap();
@@ -55,7 +56,7 @@ fn start_daemonize() -> Result {
         .working_directory(OUT_DIR.as_path())
         .user(&*ug.get_user().unwrap_or_else(|| "non-user".to_owned()))
         .group(&*ug.get_group().unwrap_or_else(|| "non-group".to_owned()))
-        .umask(0o777)
+        .umask(0o027)
         .stdout(stdout)
         .stderr(stderr)
         .privileged_action(|| "Executed before drop privileges");
@@ -73,8 +74,5 @@ fn start_daemonize() -> Result {
 }
 
 fn is_running_server() -> bool {
-   match std::os::unix::net::UnixStream::connect(OUT_DIR.join(SOCKET_FILE)) {
-        Ok(_) => true,
-        Err(_) => false,
-   }
+    unix::net::UnixStream::connect(OUT_DIR.join(SOCKET_FILE)).is_ok()
 }

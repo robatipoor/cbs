@@ -1,8 +1,13 @@
 [package]
 name = "cbs"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["mahdi <mahdi.robatipoor@gmail.com>"]
 edition = "2018"
+description = "clipboard for linux "
+homepage = "https://github.com/robatipoor/clipboard-server"
+keywords = ["clipboard", "server","linux","cli"]
+license = "MIT/APACHE"
+repository = "https://github.com/robatipoor/clipboard-server"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -22,3 +27,6 @@ env_logger = "0.6.1"
 log = "0.4.6"
 failure = "0.1.5"
 ctrlc = "3.1.3"
+
+[dev-dependencies]
+dotenv = "0.14.1"

@@ -15,4 +15,12 @@ pub enum Error {
     PollCodecError,
     #[fail(display = "")]
     PollFlushError,
+    #[fail(display = "")]
+    SetContentsError,
+    #[fail(display = "")]
+    GetContentsError,
+    #[fail(display = "")]
+    FileNotExistError,
+    #[fail(display = "")]
+    RemoveFileError,
 }

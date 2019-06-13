@@ -25,7 +25,7 @@ impl Future for Peer {
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         while let Async::Ready(data) = self.codec.poll().map_err(|e| {
-            error!("{}",e);
+            error!("{}", e);
             Error::PollCodecError
         })? {
             if let Some(d) = data {
@@ -35,7 +35,7 @@ impl Future for Peer {
             }
         }
         let _ = self.codec.poll_flush().map_err(|e| {
-            error!("{}",e);
+            error!("{}", e);
             Error::PollFlushError
         })?;
         Ok(Async::NotReady)
