@@ -16,9 +16,13 @@ mod user_group;
 
 use crate::action::Action;
 use crate::cli::AppArgs;
+use crate::constants::{OUT_DIR, STD_ERR_FILE};
 use crate::response::Response;
 use crate::server::{is_running_server, run_server};
+use crate::utils::*;
+use log::*;
 use nix::unistd::{fork, ForkResult};
+use std::io::BufRead;
 use std::thread;
 use std::time::Duration;
 use tokio::prelude::*;
@@ -27,10 +31,20 @@ fn main() {
     std::env::set_var("RUST_LOG", "info");
     env_logger::init();
     let app = AppArgs::get_app_args();
+    if app.log {
+        read_file(OUT_DIR.join(STD_ERR_FILE))
+            .and_then(|s| {
+                println!("{}", s);
+                Ok(())
+            })
+            .unwrap_or_else(|e| fatal!(e));
+        return;
+    }
     if app.server {
         match fork() {
             Ok(ForkResult::Parent { .. }) => {
                 // in parent process
+                // check server is running
                 while !is_running_server() {
                     thread::sleep(Duration::from_millis(500));
                 }
@@ -46,12 +60,14 @@ fn main() {
             }
             Err(_) => println!("Fork failed"),
         }
-    } else {
-        let _ = app.action.ok_or(()).and_then(|act| {
-            run_action(act);
-            Ok(())
-        });
+    } else if app.action.is_some() {
+        run_action(app.action.unwrap());
     }
+
+    std::io::stdin().lock().lines().next().map(|x| match x {
+        Ok(c) => run_action(Action::Set(c)),
+        Err(e) => fatal!(e),
+    });
 }
 
 fn run_action(action: Action) {
@@ -64,7 +80,7 @@ fn run_action(action: Action) {
             Ok(())
         })
         .map_err(|err| {
-            eprintln!("error {:?}", err);
+            error!("client side error {:?}", err);
         });
     tokio::run(client);
 }

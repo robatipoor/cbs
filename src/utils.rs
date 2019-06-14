@@ -1,6 +1,8 @@
 use crate::constants::*;
 use crate::errors::*;
 use log::*;
+use std::fs::File;
+use std::io::prelude::*;
 use std::path::Path;
 
 #[macro_export]
@@ -33,4 +35,20 @@ pub fn remove_file<P: AsRef<Path>>(p: P) -> Result {
     } else {
         Err(Error::FileNotExistError)
     }
+}
+
+pub fn read_file<P: AsRef<Path>>(p: P) -> Result<String> {
+    File::open(p)
+        .map_err(|e| {
+            error!("open file error {}", e);
+            Error::OpenFileError
+        })
+        .and_then(|mut f: File| {
+            let mut buf = String::new();
+            f.read_to_string(&mut buf).map_err(|e| {
+                error!("read to string error {}", e);
+                Error::ReadToStringError
+            })?;
+            Ok(buf)
+        })
 }

@@ -1,9 +1,9 @@
 # cbs
 [![Crates.io](https://img.shields.io/crates/v/cbs.svg?style=plastic)](http://crates.io/crates/cbs)
 [![Build Status](https://travis-ci.org/robatipoor/cbs.svg?branch=master)](https://travis-ci.org/robatipoor/cbs)
-[![Build status](https://ci.appveyor.com/api/projects/status/d2we8j2c58n6wq7o?svg=true)](https://ci.appveyor.com/project/robatipoor/cbs)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+Command line tool to manage clipboard
 
 **install**
 
@@ -11,21 +11,37 @@
 cargo install cbs
 ```
 
-**Build and install**
+**Build Manually**
 
 ```sh
 # build and install cbs 
+# need git, rustc, cargo, gnu make, binutils, upx
 git clone https://github.com/robatipoor/cbs \
 && cd cbs \
 && make 
 ```
 
-**Build dependency**
+## How to use
 
-git, rustc, cargo, gnu make, binutils, upx
+- Copy text: `cbs -c "Text to be copied to clipboard"`
+- Paste copied text: `cbs -p`
+- Copy from stdin: `cat file | cbs`
 
-**run**
+## Usage
 
 ```sh
+USAGE:
+    cbs [FLAGS] [OPTIONS]
 
+FLAGS:
+    -C, --clear      Clear content clipboard
+    -h, --help       Prints help information
+    -k, --kill       Kill clipboard daemon server
+    -l, --log        Show logs
+    -p, --paste      Paste text content
+    -s, --server     Start server clipboard as daemon
+    -V, --version    Prints version information
+
+OPTIONS:
+    -c, --copy <content>    Set a text content
 ```

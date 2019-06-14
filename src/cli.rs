@@ -26,21 +26,21 @@ impl AppArgs {
                 Arg::with_name("paste")
                     .short("p")
                     .long("paste")
-                    .help("paste text content")
+                    .help("Paste text content")
                     .takes_value(false),
             )
             .arg(
                 Arg::with_name("clear")
                     .short("C")
                     .long("clear")
-                    .help("clear content clipboard")
+                    .help("Clear content clipboard")
                     .takes_value(false),
             )
             .arg(
                 Arg::with_name("server")
                     .short("s")
                     .long("server")
-                    .help("start server clipboard")
+                    .help("Start server clipboard as daemon")
                     .takes_value(false),
             )
             .arg(
@@ -70,7 +70,9 @@ impl AppArgs {
         } else if matches.is_present("clear") {
             app_args.action = Some(Action::Clear);
         } else if matches.is_present("kill") {
-            //    app_args.action = Some(Action::Kill);
+            // app_args.action = Some(Action::Kill);
+            // TODO: add support kill server proccess
+            unimplemented!();
         }
         if matches.is_present("server") {
             app_args.server = true;

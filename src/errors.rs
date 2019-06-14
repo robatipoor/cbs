@@ -23,4 +23,8 @@ pub enum Error {
     FileNotExistError,
     #[fail(display = "")]
     RemoveFileError,
+    #[fail(display = "")]
+    OpenFileError,
+    #[fail(display = "")]
+    ReadToStringError,
 }

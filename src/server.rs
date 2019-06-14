@@ -18,13 +18,13 @@ pub fn run_server(daemon: bool) {
 
 fn server(daemon: bool) {
     if is_running_server() {
-        warn!("server is running !");
+        warn!("server is running !!!");
         return;
     }
     clean();
     if daemon {
         start_daemonize().unwrap_or_else(|e| fatal!(e));
-        info!("start daemon mod");
+        info!("start daemon proccess");
     } else if let Err(e) = ctrlc::set_handler(clean_and_exit) {
         fatal!(e);
     }
