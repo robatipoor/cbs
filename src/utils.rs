@@ -15,14 +15,14 @@ macro_rules! fatal {
 }
 
 pub fn clean() {
-    info!("remove pid and socket file");
+    debug!("remove pid and socket file");
     let _ = remove_file(OUT_DIR.join(PID_FILE));
     let _ = remove_file(OUT_DIR.join(SOCKET_FILE));
 }
 
 pub fn clean_and_exit() {
     clean();
-    info!("exit ...");
+    debug!("exit ...");
     std::process::exit(0);
 }
 

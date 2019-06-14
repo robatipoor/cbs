@@ -16,7 +16,7 @@ mod user_group;
 
 use crate::action::Action;
 use crate::cli::AppArgs;
-use crate::constants::{OUT_DIR, STD_ERR_FILE};
+use crate::constants::{OUT_DIR, STD_OUT_FILE};
 use crate::response::Response;
 use crate::server::{is_running_server, run_server};
 use crate::utils::*;
@@ -28,11 +28,10 @@ use std::time::Duration;
 use tokio::prelude::*;
 
 fn main() {
-    std::env::set_var("RUST_LOG", "info");
     env_logger::init();
     let app = AppArgs::get_app_args();
     if app.log {
-        read_file(OUT_DIR.join(STD_ERR_FILE))
+        read_file(OUT_DIR.join(STD_OUT_FILE))
             .and_then(|s| {
                 println!("{}", s);
                 Ok(())
@@ -62,6 +61,7 @@ fn main() {
         }
     } else if app.action.is_some() {
         run_action(app.action.unwrap());
+        return;
     }
 
     std::io::stdin().lock().lines().next().map(|x| match x {

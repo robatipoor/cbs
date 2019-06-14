@@ -24,11 +24,11 @@ fn server(daemon: bool) {
     clean();
     if daemon {
         start_daemonize().unwrap_or_else(|e| fatal!(e));
-        info!("start daemon proccess");
+        debug!("start daemon proccess");
     } else if let Err(e) = ctrlc::set_handler(clean_and_exit) {
         fatal!(e);
     }
-    info!("unix listener bind to {:?}", OUT_DIR.join(SOCKET_FILE));
+    debug!("unix listener bind to {:?}", OUT_DIR.join(SOCKET_FILE));
     let listener = UnixListener::bind(OUT_DIR.join(SOCKET_FILE)).unwrap();
     let server = listener
         .incoming()
@@ -42,7 +42,7 @@ fn server(daemon: bool) {
         .map_err(|e| {
             error!("error => {}", e);
         });
-    info!("start server");
+    debug!("start server");
     tokio::run(server);
 }
 
@@ -63,7 +63,7 @@ fn start_daemonize() -> Result {
 
     match daemonize.start() {
         Ok(_) => {
-            info!("Success, daemonized");
+            debug!("Success, daemonized");
             Ok(())
         }
         Err(e) => {
