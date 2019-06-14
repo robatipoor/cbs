@@ -12,6 +12,8 @@ mod errors;
 mod peer;
 mod response;
 mod server;
+#[cfg(test)]
+mod tests;
 mod user_group;
 
 use crate::action::Action;
@@ -39,6 +41,7 @@ fn main() {
             .unwrap_or_else(|e| fatal!(e));
         return;
     }
+
     if app.server {
         match fork() {
             Ok(ForkResult::Parent { .. }) => {
@@ -62,12 +65,12 @@ fn main() {
     } else if app.action.is_some() {
         run_action(app.action.unwrap());
         return;
+    } else {
+        std::io::stdin().lock().lines().next().map(|x| match x {
+            Ok(c) => run_action(Action::Set(c)),
+            Err(e) => fatal!(e),
+        });
     }
-
-    std::io::stdin().lock().lines().next().map(|x| match x {
-        Ok(c) => run_action(Action::Set(c)),
-        Err(e) => fatal!(e),
-    });
 }
 
 fn run_action(action: Action) {
