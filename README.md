@@ -1,9 +1,8 @@
 # cbs
 [![Crates.io](https://img.shields.io/crates/v/cbs.svg?style=plastic)](http://crates.io/crates/cbs)
 [![Build Status](https://travis-ci.org/robatipoor/clipboard-server.svg?branch=master)](https://travis-ci.org/robatipoor/clipboard-server)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
+[![License](https://img.shields.io/crates/l/cbs.svg)](https://crates.io/crates/cbs/)
+### work in progress
 Command line tool to manage clipboard
 
 **install**

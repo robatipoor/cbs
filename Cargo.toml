@@ -6,7 +6,7 @@ edition = "2018"
 description = "clipboard for linux "
 homepage = "https://github.com/robatipoor/clipboard-server"
 keywords = ["clipboard", "server","linux","cli"]
-license = "MIT/APACHE"
+license = "MIT/Apache-2.0"
 repository = "https://github.com/robatipoor/clipboard-server"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

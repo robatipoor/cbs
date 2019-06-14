@@ -5,26 +5,26 @@ pub type Result<T = ()> = StdResult<T, Error>;
 
 #[derive(Debug, Fail)]
 pub enum Error {
-    #[fail(display = "")]
+    #[fail(display = "parse error")]
     ParseError,
-    #[fail(display = "")]
+    #[fail(display = "daemon error")]
     DaemonError,
-    #[fail(display = "")]
+    #[fail(display = "clipboard provider error")]
     ClipboardProviderError,
-    #[fail(display = "")]
+    #[fail(display = "poll codec error")]
     PollCodecError,
-    #[fail(display = "")]
+    #[fail(display = "poll flush error")]
     PollFlushError,
-    #[fail(display = "")]
+    #[fail(display = "set content error")]
     SetContentsError,
-    #[fail(display = "")]
+    #[fail(display = "set content error")]
     GetContentsError,
-    #[fail(display = "")]
+    #[fail(display = "file not exist error")]
     FileNotExistError,
-    #[fail(display = "")]
+    #[fail(display = "remove file error")]
     RemoveFileError,
-    #[fail(display = "")]
+    #[fail(display = "open file error")]
     OpenFileError,
-    #[fail(display = "")]
+    #[fail(display = "read to string error")]
     ReadToStringError,
 }
