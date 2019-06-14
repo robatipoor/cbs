@@ -1,53 +1,62 @@
 extern crate assert_cmd;
 
 use assert_cmd::prelude::*;
+use std::panic;
 use std::process::Command;
-use std::thread;
-use std::time::Duration;
+
 #[test]
-fn set_and_get_content_test() {
-    Command::cargo_bin(env!("CARGO_PKG_NAME"))
+fn command_test() {
+    run_test(|| {
+        Command::cargo_bin(env!("CARGO_PKG_NAME"))
+            .unwrap()
+            .arg("-c")
+            .arg("hi")
+            .spawn()
+            .unwrap()
+            .wait()
+            .unwrap();
+        let out = Command::cargo_bin(env!("CARGO_PKG_NAME"))
+            .unwrap()
+            .arg("-p")
+            .output()
+            .unwrap()
+            .stdout;
+        assert_eq!(std::str::from_utf8(&out).unwrap().trim(), "hi");
+        Command::cargo_bin(env!("CARGO_PKG_NAME"))
+            .unwrap()
+            .arg("-C")
+            .assert()
+            .success();
+        let out = Command::cargo_bin(env!("CARGO_PKG_NAME"))
+            .unwrap()
+            .arg("-p")
+            .output()
+            .unwrap()
+            .stdout;
+        assert_eq!(std::str::from_utf8(&out).unwrap().trim(), "");
+    });
+}
+
+fn run_test<T>(test: T)
+where
+    T: FnOnce() -> () + panic::UnwindSafe,
+{
+    std::env::set_var("RUST_LOG", "debug");
+    let _ = Command::cargo_bin(env!("CARGO_PKG_NAME"))
         .unwrap()
-        .arg("-sc")
-        .arg("hi")
+        .arg("-s")
         .spawn()
         .unwrap()
         .wait()
         .unwrap();
-    thread::sleep(Duration::from_secs(1));
-    let out = Command::cargo_bin(env!("CARGO_PKG_NAME"))
-        .unwrap()
-        .arg("-p")
-        .output()
-        .unwrap()
-        .stdout;
-    thread::sleep(Duration::from_secs(1));
-    Command::cargo_bin(env!("CARGO_PKG_NAME"))
+    let _result = panic::catch_unwind(|| {
+        test();
+    });
+    let _ = Command::cargo_bin(env!("CARGO_PKG_NAME"))
         .unwrap()
         .arg("-k")
-        .assert()
-        .success();
-    assert_eq!(std::str::from_utf8(&out).unwrap().trim(), "hi");
-}
-#[test]
-fn clear_content_test() {
-    Command::cargo_bin(env!("CARGO_PKG_NAME"))
+        .spawn()
         .unwrap()
-        .arg("-c")
-        .arg("hi")
-        .assert()
-        .success();
-    thread::sleep(Duration::from_secs(1));
-    let out = Command::cargo_bin(env!("CARGO_PKG_NAME"))
-        .unwrap()
-        .arg("-C")
-        .output()
-        .unwrap()
-        .stdout;
-    Command::cargo_bin(env!("CARGO_PKG_NAME"))
-        .unwrap()
-        .arg("-k")
-        .assert()
-        .success();
-    assert_eq!(std::str::from_utf8(&out).unwrap().trim(), "");
+        .wait()
+        .unwrap();
 }

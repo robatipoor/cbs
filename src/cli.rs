@@ -70,9 +70,7 @@ impl AppArgs {
         } else if matches.is_present("clear") {
             app_args.action = Some(Action::Clear);
         } else if matches.is_present("kill") {
-            // app_args.action = Some(Action::Kill);
-            // TODO: add support kill server proccess
-            unimplemented!();
+            app_args.action = Some(Action::Kill);
         }
         if matches.is_present("server") {
             app_args.server = true;

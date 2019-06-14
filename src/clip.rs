@@ -1,6 +1,7 @@
 use crate::action::Action;
 use crate::errors::{Error, Result};
 use crate::response::Response;
+use crate::utils::clean;
 use bytes::BytesMut;
 use clipboard::{ClipboardContext, ClipboardProvider};
 use log::*;
@@ -29,6 +30,11 @@ pub fn handle_action(bytes: BytesMut) -> Result<BytesMut> {
                 Error::SetContentsError
             })?;
             None
+        }
+        Action::Kill => { // FIXBUG
+            clean();
+            debug!("kill ...");
+            std::process::exit(0)
         }
     };
     Response {

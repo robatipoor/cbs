@@ -67,7 +67,11 @@ fn main() {
         return;
     } else {
         std::io::stdin().lock().lines().next().map(|x| match x {
-            Ok(c) => run_action(Action::Set(c)),
+            Ok(c) => {
+                if !c.is_empty() {
+                    run_action(Action::Set(c))
+                }
+            }
             Err(e) => fatal!(e),
         });
     }
