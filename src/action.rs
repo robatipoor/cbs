@@ -16,7 +16,6 @@ pub enum Action {
     Clear,
     Get,
     Set(String),
-    Kill,
 }
 
 #[allow(dead_code)]

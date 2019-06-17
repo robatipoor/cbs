@@ -36,10 +36,8 @@ USAGE:
 FLAGS:
     -C, --clear      Clear content clipboard
     -h, --help       Prints help information
-    -k, --kill       Kill clipboard daemon server
     -l, --log        Show logs
     -p, --paste      Paste text content
-    -s, --server     Start server clipboard as daemon
     -V, --version    Prints version information
 
 OPTIONS:

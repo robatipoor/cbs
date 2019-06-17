@@ -4,7 +4,7 @@ extern crate nix;
 #[macro_use]
 mod utils;
 mod action;
-mod cli;
+mod args;
 mod clip;
 mod codec;
 mod constants;
@@ -17,7 +17,7 @@ mod tests;
 mod user_group;
 
 use crate::action::Action;
-use crate::cli::AppArgs;
+use crate::args::AppArgs;
 use crate::constants::{OUT_DIR, STD_OUT_FILE};
 use crate::response::Response;
 use crate::server::{is_running_server, run_server};
@@ -42,11 +42,11 @@ fn main() {
         return;
     }
 
-    if app.server {
+    if !is_running_server() {
         match fork() {
             Ok(ForkResult::Parent { .. }) => {
                 // in parent process
-                // check server is running
+                // wait util server is run
                 while !is_running_server() {
                     thread::sleep(Duration::from_millis(500));
                 }

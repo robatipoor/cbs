@@ -37,24 +37,10 @@ impl AppArgs {
                     .takes_value(false),
             )
             .arg(
-                Arg::with_name("server")
-                    .short("s")
-                    .long("server")
-                    .help("Start server clipboard as daemon")
-                    .takes_value(false),
-            )
-            .arg(
                 Arg::with_name("log")
                     .short("l")
                     .long("log")
                     .help("Show logs")
-                    .takes_value(false),
-            )
-            .arg(
-                Arg::with_name("kill")
-                    .short("k")
-                    .long("kill")
-                    .help("kill clipboard server")
                     .takes_value(false),
             )
             .get_matches();
@@ -69,9 +55,8 @@ impl AppArgs {
             app_args.action = Some(Action::Set(p.to_owned()));
         } else if matches.is_present("clear") {
             app_args.action = Some(Action::Clear);
-        } else if matches.is_present("kill") {
-            app_args.action = Some(Action::Kill);
         }
+
         if matches.is_present("server") {
             app_args.server = true;
         }
