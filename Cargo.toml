@@ -22,7 +22,7 @@ serde_derive = "1.0.93"
 serde = "1.0.93"
 
 [target.'cfg(target_family = "unix")'.dependencies]
-futures = "0.1.27"
+futures = "0.1.28"
 tokio = "0.1.21"
 hex = "0.3.2"
 daemonize = "0.4.1"
@@ -33,5 +33,5 @@ bytes = "0.4.12"
 bincode = "1.1.4"
 
 [dev-dependencies]
-dotenv = "0.14.1"
 assert_cmd = "0.11"
+tokio = "0.1.21"

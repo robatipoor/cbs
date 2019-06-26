@@ -36,7 +36,5 @@ mod win_test {
     // TODO add tests
 
     #[test]
-    fn win_cbs_test() {
-
-    }
+    fn win_cbs_test() {}
 }
