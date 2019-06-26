@@ -27,4 +27,8 @@ pub enum Error {
     OpenFileError,
     #[fail(display = "read to string error")]
     ReadToStringError,
+    #[fail(display = "read stdin error")]
+    StdinError,
+    #[fail(display = "kill error")]
+    KillError,
 }

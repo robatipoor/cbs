@@ -1,8 +1,10 @@
 use crate::constants::*;
 use crate::errors::*;
 use log::*;
+use nix::sys::signal::{kill, SIGTERM};
+use nix::unistd::Pid;
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::{prelude::*, BufRead};
 use std::path::Path;
 
 #[macro_export]
@@ -12,6 +14,18 @@ macro_rules! fatal {
         clean();
         std::process::exit(1)
     }};
+}
+
+pub fn read_from_stdin() -> Result<String> {
+    std::io::stdin()
+        .lock()
+        .lines()
+        .next()
+        .unwrap()
+        .map_err(|e| {
+            error!("{}", e);
+            Error::StdinError
+        })
 }
 
 pub fn clean() {
@@ -51,4 +65,19 @@ pub fn read_file<P: AsRef<Path>>(p: P) -> Result<String> {
             })?;
             Ok(buf)
         })
+}
+
+pub fn kill_server() -> Result {
+    let pid = read_file(OUT_DIR.join(PID_FILE))?
+        .parse::<i32>()
+        .map_err(|e| {
+            error!("{}", e);
+            Error::ParseError
+        })?;
+    kill(Pid::from_raw(pid), SIGTERM).map_err(|e| {
+        error!("{}", e);
+        Error::KillError
+    })?;
+    clean();
+    Ok(())
 }

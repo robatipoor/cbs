@@ -1,11 +1,9 @@
-use crate::action::Action;
-use clap::*;
+use cbs::action::Action;
+use clap::{App, Arg, ArgMatches};
 
 #[derive(Debug, Default)]
 pub struct AppArgs {
     pub action: Option<Action>,
-    pub log: bool,
-    pub server: bool,
 }
 
 impl AppArgs {
@@ -36,19 +34,8 @@ impl AppArgs {
                     .help("Clear content clipboard")
                     .takes_value(false),
             )
-            .arg(
-                Arg::with_name("log")
-                    .short("l")
-                    .long("log")
-                    .help("Show logs")
-                    .takes_value(false),
-            )
             .get_matches();
         let mut app_args: AppArgs = AppArgs::default();
-        if matches.is_present("log") {
-            app_args.log = true;
-            return app_args;
-        }
         if matches.is_present("paste") {
             app_args.action = Some(Action::Get);
         } else if let Some(p) = matches.value_of("copy") {
@@ -56,11 +43,6 @@ impl AppArgs {
         } else if matches.is_present("clear") {
             app_args.action = Some(Action::Clear);
         }
-
-        if matches.is_present("server") {
-            app_args.server = true;
-        }
-
         app_args
     }
 }
