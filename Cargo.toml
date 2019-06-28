@@ -1,6 +1,6 @@
 [package]
 name = "cbs"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["mahdi <mahdi.robatipoor@gmail.com>"]
 edition = "2018"
 description = "Command line clipboard manager "

@@ -88,7 +88,10 @@ impl TryInto<BytesMut> for Action {
     fn try_into(self) -> Result<BytesMut> {
         serialize(&self)
             .and_then(|v| Ok(BytesMut::from(v)))
-            .map_err(|_| Error::ParseError)
+            .map_err(|e| {
+                error!("{}", e);
+                Error::ParseError
+            })
     }
 }
 
@@ -96,6 +99,9 @@ impl TryFrom<BytesMut> for Action {
     type Error = Error;
 
     fn try_from(value: BytesMut) -> Result<Self> {
-        deserialize(&value).map_err(|_| Error::ParseError)
+        deserialize(&value).map_err(|e| {
+            error!("{}", e);
+            Error::ParseError
+        })
     }
 }

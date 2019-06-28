@@ -5,15 +5,15 @@ use log::*;
 use std::io::BufRead;
 
 pub fn action_handler(action: Option<Action>) {
-    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap_or_else(|e| fatal!(e));;
+    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
     if action.is_some() {
         match action.unwrap() {
-            Action::Clear => ctx.set_contents(String::new()).unwrap_or_else(|e| fatal!(e));,
-            Action::Get => println!("{}", ctx.get_contents().unwrap_or_else(|e| fatal!(e));),
-            Action::Set(data) => ctx.set_contents(data).unwrap_or_else(|e| fatal!(e));,
+            Action::Clear => ctx.set_contents(String::new()).unwrap(),
+            Action::Get => println!("{}", ctx.get_contents().unwrap()),
+            Action::Set(data) => ctx.set_contents(data).unwrap(),
         }
     } else {
-        ctx.set_contents(read_from_stdin().unwrap_or_else(|e| fatal!(e))).unwrap_or_else(|e| fatal!(e));
+        ctx.set_contents(read_from_stdin().unwrap()).unwrap();
     }
 }
 
