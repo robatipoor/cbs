@@ -52,5 +52,3 @@ pub mod user_group;
 pub mod os;
 
 pub use crate::action::Action;
-#[cfg(target_family = "unix")]
-pub use crate::server::run_server;

@@ -8,7 +8,7 @@ fn main() {
     use tokio::prelude::*;
     
     let client = Action::Get
-        .send()
+        .send_request()
         .and_then(|resp| {
             if resp.content.is_some() {
                 println!("{}", resp.content.unwrap());

@@ -8,28 +8,15 @@ use futures::{Future, Stream};
 use log::*;
 use std::fs::File;
 use std::os::unix;
-use std::sync::{Once, ONCE_INIT};
 use tokio::net::UnixListener;
-static ONCE: Once = ONCE_INIT;
 
-pub fn run_server(daemon: bool) {
-    ONCE.call_once(|| server(daemon));
-}
-
-fn server(daemon: bool) {
-    if is_running_server() {
-        warn!("server is running !!!");
-        return;
-    }
+pub fn run_daemon_server() {
     clean();
-    if daemon {
-        start_daemonize().unwrap_or_else(|e| fatal!(e));
-        debug!("start daemon proccess");
-    } else if let Err(e) = ctrlc::set_handler(clean_and_exit) {
-        fatal!(e);
-    }
+    start_daemonize().unwrap_or_else(|e| fatal!(e));
+    debug!("start daemon proccess");
+    ctrlc::set_handler(clean_and_exit).unwrap_or_else(|e| fatal!(e));
     debug!("unix listener bind to {:?}", OUT_DIR.join(SOCKET_FILE));
-    let listener = UnixListener::bind(OUT_DIR.join(SOCKET_FILE)).unwrap();
+    let listener = UnixListener::bind(OUT_DIR.join(SOCKET_FILE)).unwrap_or_else(|e| fatal!(e));
     let server = listener
         .incoming()
         .for_each(|socket| {
@@ -47,8 +34,8 @@ fn server(daemon: bool) {
 }
 
 fn start_daemonize() -> Result {
-    let stdout = File::create(OUT_DIR.join(STD_OUT_FILE)).unwrap();
-    let stderr = File::create(OUT_DIR.join(STD_ERR_FILE)).unwrap();
+    let stdout = File::create(OUT_DIR.join(STD_OUT_FILE)).unwrap_or_else(|e| fatal!(e));
+    let stderr = File::create(OUT_DIR.join(STD_ERR_FILE)).unwrap_or_else(|e| fatal!(e));
     let ug = UserGroup::default();
     let daemonize = Daemonize::new()
         .pid_file(OUT_DIR.join(PID_FILE))
