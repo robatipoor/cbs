@@ -1,7 +1,7 @@
 [package]
 name = "cbs"
-version = "0.0.4"
-authors = ["mahdi <mahdi.robatipoor@gmail.com>"]
+version = "0.0.5"
+authors = ["mahdi robatipoor <mahdi.robatipoor@gmail.com>"]
 edition = "2018"
 description = "Command line clipboard manager "
 homepage = "https://github.com/robatipoor/clipboard-server"

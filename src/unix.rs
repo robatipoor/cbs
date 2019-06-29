@@ -26,7 +26,10 @@ pub fn action_handler(action: Option<Action>) {
                     thread::sleep(Duration::from_millis(500));
                 }
                 if let Some(a) = action {
-                    run_action(a)
+                    run_action(a);
+                } else {
+                    let content = read_from_stdin().unwrap_or_else(|e| fatal!(e));
+                    run_action(Action::Set(content))
                 }
             }
             Ok(ForkResult::Child) => {
@@ -38,7 +41,8 @@ pub fn action_handler(action: Option<Action>) {
     } else if let Some(a) = action {
         run_action(a);
     } else {
-        run_action(Action::Set(read_from_stdin().unwrap_or_else(|e| fatal!(e))))
+        let content = read_from_stdin().unwrap_or_else(|e| fatal!(e));
+        run_action(Action::Set(content))
     }
 }
 
