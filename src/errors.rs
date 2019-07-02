@@ -2,7 +2,7 @@ use failure::Fail;
 use std::result::Result as StdResult;
 
 pub type Result<T = ()> = StdResult<T, Error>;
-
+#[allow(dead_code)]
 #[derive(Debug, Fail)]
 pub enum Error {
     #[fail(display = "parse error")]

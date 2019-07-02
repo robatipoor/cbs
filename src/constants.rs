@@ -1,8 +1,7 @@
-use lazy_static::*;
 use std::path::PathBuf;
 
 pub const SPLITTER: &str = "\r\n";
-pub const SPLITTER_LEN: usize = 2;
+pub const SPLITTER_LEN: usize = 2; // SPLITTER.len(); /** nightly only worked */
 pub const BUFFER_SIZE: usize = 1024;
 pub const STD_ERR_FILE: &str = "cbs.err";
 pub const STD_OUT_FILE: &str = "cbs.out";

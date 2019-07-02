@@ -3,6 +3,7 @@ extern crate cbs;
 extern crate clap;
 
 mod args;
+mod errors;
 
 use crate::args::AppArgs;
 use cbs::os::action_handler;

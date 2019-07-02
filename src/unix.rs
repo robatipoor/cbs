@@ -1,10 +1,10 @@
-use crate::action::Action;
 use crate::constants::OUT_DIR;
 use crate::constants::*;
 use crate::errors::{Error, Result};
+use crate::message::Action;
 use crate::response::Response;
 use crate::server::{is_running_server, run_daemon_server};
-use crate::utils::{clean, read_from_stdin};
+use crate::utils::clean;
 use bincode::{deserialize, serialize};
 use bytes::buf::BufMut;
 use bytes::BytesMut;
@@ -16,7 +16,7 @@ use std::thread;
 use std::time::Duration;
 use tokio::net::UnixStream;
 
-pub fn action_handler(action: Option<Action>) {
+pub fn action_handler(action: Action) {
     if !is_running_server() {
         match fork() {
             Ok(ForkResult::Parent { .. }) => {
@@ -25,12 +25,7 @@ pub fn action_handler(action: Option<Action>) {
                 while !is_running_server() {
                     thread::sleep(Duration::from_millis(500));
                 }
-                if let Some(a) = action {
-                    run_action(a);
-                } else {
-                    let content = read_from_stdin().unwrap_or_else(|e| fatal!(e));
-                    run_action(Action::Set(content))
-                }
+                run_action(action);
             }
             Ok(ForkResult::Child) => {
                 // a new child process
@@ -38,11 +33,8 @@ pub fn action_handler(action: Option<Action>) {
             }
             Err(e) => fatal!(e),
         }
-    } else if let Some(a) = action {
-        run_action(a);
     } else {
-        let content = read_from_stdin().unwrap_or_else(|e| fatal!(e));
-        run_action(Action::Set(content))
+        run_action(action);
     }
 }
 

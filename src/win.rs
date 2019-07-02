@@ -1,32 +1,24 @@
-use crate::action::Action;
-use crate::errors::{Error, Result};
+use crate::message::{Action, Selection};
 use clipboard::{ClipboardContext, ClipboardProvider};
-use log::*;
-use std::io::BufRead;
 
-pub fn action_handler(action: Option<Action>) {
+pub fn action_handler(action: Action) {
     let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
-    if action.is_some() {
-        match action.unwrap() {
-            Action::Clear => ctx.set_contents(String::new()).unwrap(),
-            Action::Get => println!("{}", ctx.get_contents().unwrap()),
-            Action::Set(data) => ctx.set_contents(data).unwrap(),
-        }
-    } else {
-        ctx.set_contents(read_from_stdin().unwrap()).unwrap();
+    match action {
+        Action::Clear(select) => match select {
+            Selection::Clipboard => {
+                ctx.set_contents(String::new()).unwrap();
+            }
+            _ => not_support_msg(),
+        },
+        Action::Get(select) => match select {
+            Selection::Clipboard => println!("{}", ctx.get_contents().unwrap()),
+            _ => not_support_msg(),
+        },
+        Action::Set { content, select } => match select {
+            Selection::Clipboard => ctx.set_contents(content).unwrap(),
+            _ => not_support_msg(),
+        },
     }
-}
-
-pub fn read_from_stdin() -> Result<String> {
-    std::io::stdin()
-        .lock()
-        .lines()
-        .next()
-        .unwrap()
-        .map_err(|e| {
-            error!("{}", e);
-            Error::StdinError
-        })
 }
 
 #[cfg(test)]
@@ -37,4 +29,9 @@ mod win_test {
 
     #[test]
     fn win_cbs_test() {}
+}
+
+fn not_support_msg() {
+    println!("windows not support !!!");
+    std::process::exit(0);
 }

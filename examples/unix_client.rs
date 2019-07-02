@@ -1,4 +1,3 @@
-
 extern crate cbs;
 
 use cbs::Action;
@@ -6,8 +5,7 @@ use cbs::Action;
 #[cfg(target_family = "unix")]
 fn main() {
     use tokio::prelude::*;
-    
-    let client = Action::Get
+    let client = Action::get()
         .send_request()
         .and_then(|resp| {
             if resp.content.is_some() {

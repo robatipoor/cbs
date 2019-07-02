@@ -17,22 +17,29 @@ cargo install cbs
 
 ## How to use
 
-- copy text to clipboard: `cbs -c "Text to be copied to clipboard"`
-- paste copied text: `cbs -p`
-- copy from stdin: `cat exmaple-file.txt | cbs`
+- copy text to clipboard: `cbs copy "Text to be copied to clipboard"`
+- copy text to primary: `cbs copy -s primary "Text to be copied to primary # only linux"`
+- paste copied text from clipboard: `cbs paste`
+- paste copied text from primary: `cbs paste -s primary # only linux`
+- copy text to clipboard from stdin: `cat exmaple-file.txt | cbs`
+- copy text to primary from stdin: `cat exmaple-file.txt | cbs -s primary # only linux`
 
 ## Usage
 
 ```sh
 USAGE:
-    cbs [FLAGS] [OPTIONS]
+    cbs [OPTIONS] [SUBCOMMAND]
 
 FLAGS:
-    -C, --clear      Clear content clipboard
     -h, --help       Prints help information
-    -p, --paste      Paste text content
     -V, --version    Prints version information
 
 OPTIONS:
-    -c, --copy <content>    Set a text content
+    -s, --select <selection>  to access clipboard or primary [default: clipboard]  [possible values: clipboard,primary]
+
+SUBCOMMANDS:
+    clear    clear text content
+    copy     copy text content
+    help     Prints this message or the help of the given subcommand(s)
+    paste    paste text content
 ```

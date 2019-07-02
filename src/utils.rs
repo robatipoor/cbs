@@ -4,7 +4,7 @@ use log::*;
 use nix::sys::signal::{kill, SIGTERM};
 use nix::unistd::Pid;
 use std::fs::File;
-use std::io::{prelude::*, BufRead};
+use std::io::prelude::*;
 use std::path::Path;
 
 #[macro_export]
@@ -14,18 +14,6 @@ macro_rules! fatal {
         clean();
         std::process::exit(1)
     }};
-}
-
-pub fn read_from_stdin() -> Result<String> {
-    std::io::stdin()
-        .lock()
-        .lines()
-        .next()
-        .unwrap()
-        .map_err(|e| {
-            error!("{}", e);
-            Error::StdinError
-        })
 }
 
 pub fn clean() {
