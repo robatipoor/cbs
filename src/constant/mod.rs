@@ -1,0 +1,1 @@
+pub const SPLITTER : u8 = b'\n';

@@ -2,11 +2,13 @@ use std::net::SocketAddr;
 
 use futures::prelude::*;
 
+pub mod args;
+
 use log::error;
 use tokio::net::{TcpListener, TcpStream};
 use tokio_util::codec::Framed;
 
-use crate::{codec::ClipboardCodec, message::Message};
+use crate::{codec::MessageCodec, message::Message};
 #[derive(Debug)]
 pub struct Server {
     addr: String,
@@ -33,7 +35,7 @@ impl Server {
 }
 
 pub async fn process(stream: TcpStream, addr: SocketAddr) -> crate::Result {
-    let (mut sink, mut stream) = Framed::new(stream, ClipboardCodec::new()).split();
+    let (mut sink, mut stream) = Framed::new(stream, MessageCodec::new()).split();
     loop {
         tokio::select! {
             Some(msg) = stream.next() => {
